@@ -1,0 +1,31 @@
+# Put into timer
+if len(rock_group)<=12:
+	rock_group.add(Sprite(rock_pos, rock_vel, 0, rock_avel, asteroid_image, asteroid_info))
+
+# Put into draw.canvas
+def process_sprite_group():
+	for draw_rock in rock_group:
+		draw_rock.draw(canvas)
+		draw_rock.update()
+	
+
+def collide(self,other_object):
+	distance=dist(self.pos,other_object.pos):
+	if distance < self.radius+x_object.radius:
+		return True
+		
+def group_colli():
+	#sr_colli,sr stand for ship and rock
+	for r_colli in rock_group:
+		if r_colli.collide(my_ship):
+			r_colli.animated = True
+			rock_group.remove(r_colli)
+			lives -= 1
+		
+		r_colli = 0
+		
+		for m_colli in missile_group:
+			if r_colli.collide(m_colli):
+			r_colli.animate = True
+			rock_group.remove(r_colli)
+			missile_group.remove(m_colli)

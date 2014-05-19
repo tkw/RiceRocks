@@ -1,3 +1,6 @@
+rock_group = set()
+missile_group = set()
+
 # Put into timer
 if len(rock_group)<=12:
 	rock_group.add(Sprite(rock_pos, rock_vel, 0, rock_avel, asteroid_image, asteroid_info))
@@ -8,6 +11,9 @@ def process_sprite_group():
 		draw_rock.draw(canvas)
 		draw_rock.update()
 	
+	for draw_missile in missile_group:
+		draw_missile.draw(canvas)
+		draw_missile.update()
 
 def collide(self,other_object):
 	distance=dist(self.pos,other_object.pos):
@@ -29,3 +35,6 @@ def group_colli():
 			r_colli.animate = True
 			rock_group.remove(r_colli)
 			missile_group.remove(m_colli)
+			
+# put into Ship class.shoot()
+missile_group.add(Sprite(missile_pos, missile_vel, self.angle, 0, missile_image, missile_info, missile_sound))

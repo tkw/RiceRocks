@@ -17,7 +17,7 @@ counter=0
 rock_group = set()
 missile_group = set()
 rm_rock_group = set()
-missile_group = set()
+rm_missile_group = set()
 
 class ImageInfo:
     def __init__(self, center, size, radius = 0, lifespan = None, animated = False):
@@ -191,8 +191,11 @@ class Sprite:
         # update position
         self.pos[0] = (self.pos[0] + self.vel[0]) % WIDTH
         self.pos[1] = (self.pos[1] + self.vel[1]) % HEIGHT
-  
         
+        # update age
+        self.age+=0.8
+        if self.age>self.lifespan:
+            return False
 # key handlers to control ship   
 def keydown(key):
     if key == simplegui.KEY_MAP['left']:
@@ -253,10 +256,15 @@ def draw(canvas):
     for draw_rock in rock_group:
         draw_rock.draw(canvas)
         draw_rock.update()
-    # draw missile 
+    # draw missile 	
     for draw_missile in missile_group:
         draw_missile.draw(canvas)
-        draw_missile.update()
+        print draw_missile.age
+        if draw_missile.update() ==False:
+            rm_missile_group.add(draw_missile)
+    
+    # remove age>lifespan missile
+    missile_group.difference_update(rm_missile_group)
     # a_rock.draw(canvas)
     # a_missile.draw(canvas)
     
@@ -300,3 +308,4 @@ timer = simplegui.create_timer(1000.0, rock_spawner)
 # get things rolling
 timer.start()
 frame.start()
+soundtrack.play()

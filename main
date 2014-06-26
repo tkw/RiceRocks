@@ -191,11 +191,14 @@ class Sprite:
         # update position
         self.pos[0] = (self.pos[0] + self.vel[0]) % WIDTH
         self.pos[1] = (self.pos[1] + self.vel[1]) % HEIGHT
-        
-        # update age
-        self.age+=0.8
-        if self.age>self.lifespan:
-            return False
+		
+		# update age for missile
+		self.age+=0.8
+		if self.age>self.lifespan:
+			return False
+			
+	
+			
 # key handlers to control ship   
 def keydown(key):
     if key == simplegui.KEY_MAP['left']:
@@ -206,9 +209,8 @@ def keydown(key):
         my_ship.set_thrust(True)
     elif key == simplegui.KEY_MAP['space']:
         my_ship.shoot()
-        for draw_rock in rock_group:
-            draw_rock.animated=True
-            
+        
+			
 def keyup(key):
     if key == simplegui.KEY_MAP['left']:
         my_ship.increment_angle_vel()
@@ -230,7 +232,7 @@ def click(pos):
 def draw(canvas):
     global time, started, counter,frame
     # Animated timer
-    frame=(counter % explosion_frame) // 1
+	frame=(counter % explosion_frame) // 1
     counter+=0.4
     
     # animiate background
@@ -251,21 +253,35 @@ def draw(canvas):
     # draw ship and sprites
     my_ship.draw(canvas)
     my_ship.update()
-    
-    # draw all rock in screen
-    for draw_rock in rock_group:
-        draw_rock.draw(canvas)
-        draw_rock.update()
-    # draw missile 	
-    for draw_missile in missile_group:
-        draw_missile.draw(canvas)
-        print draw_missile.age
-        if draw_missile.update() ==False:
-            rm_missile_group.add(draw_missile)
-    
-    # remove age>lifespan missile
-    missile_group.difference_update(rm_missile_group)
-    # a_rock.draw(canvas)
+	
+	# draw all rock in screen
+	for draw_rock in rock_group:
+		draw_rock.draw(canvas)
+		draw_rock.update()
+	# draw missile 	
+	for draw_missile in missile_group:
+		draw_missile.draw(canvas)
+		if draw_missile.update() ==False:
+			rm_missile_group.add(draw_missile)
+	
+	for r in rock_group:
+		if dist(r.pos,my_ship.pos)<= (r.radius+my_ship.radius):
+			rm_rock_group.add(r)
+		
+		else:
+			for m in missile_group:
+				if dist(r.pos,m.pos)<= (r.radius+m.radius):
+					rm_rock_group.add(r)
+					rm_missile_group.add(m)
+			
+		
+	
+	
+	# remove age>lifespan missile
+	missile_group.difference_update(rm_missile_group)
+	rock_group.difference_update(rm_rock_group)
+	
+	# a_rock.draw(canvas)
     # a_missile.draw(canvas)
     
     # update ship and sprites
@@ -286,9 +302,9 @@ def rock_spawner():
     rock_vel = [random.random() * .6 - .3, random.random() * .6 - .3]
     rock_avel = random.random() * .2 - .1 #rock_avel is angel vel
     # a_rock = Sprite(rock_pos, rock_vel, 0, rock_avel, asteroid_image, asteroid_info)
-    if len(rock_group)<=11:
-        rock_group.add(Sprite(rock_pos, rock_vel, 0, rock_avel, asteroid_image, asteroid_info))
-    
+	if len(rock_group)<=11:
+		rock_group.add(Sprite(rock_pos, rock_vel, 0, rock_avel, asteroid_image, asteroid_info))
+	
 # initialize stuff
 frame = simplegui.create_frame("Asteroids", WIDTH, HEIGHT)
 

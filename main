@@ -270,7 +270,16 @@ def draw(canvas):
     my_ship.draw(canvas)
     my_ship.update()
 	
+	# End the game
+	if lives<=0:
+		started=False
+		timer.stop()
+		rm_rock_group.update(rock_group)
+		lives=3
+		score=0
+	
 	process_sprite_group(canvas)
+	
 	
 	# detect collision
 	for r in rock_group:
@@ -293,9 +302,6 @@ def draw(canvas):
 					
 		if r.frame>=23:
 			rm_rock_group.add(r)
-			
-			
-			
 	
 	# remove age>lifespan missile
 	missile_group.difference_update(rm_missile_group)
@@ -305,7 +311,7 @@ def draw(canvas):
     # a_missile.draw(canvas)
     
     # update ship and sprites
-    
+   
     # a_rock.update()
     # a_missile.update()
 
